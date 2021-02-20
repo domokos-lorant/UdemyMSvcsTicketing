@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: auth
-          #image: lorantd/auth
-          image: us.gcr.io/ticketing-dev-305406/auth
+          image: lorantd/auth
+          #image: us.gcr.io/ticketing-dev-305406/auth
 ---
 apiVersion: v1
 kind: Service
