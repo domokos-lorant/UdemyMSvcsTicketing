@@ -21,6 +21,15 @@ const userSchema = new Schema<UserDocument>({
       type: String,
       required: true
    }
+}, {
+   toJSON: {
+      transform(_doc, ret) {
+         ret.id = ret._id;
+         delete ret._id;
+         delete ret.password;
+         delete ret.__v;
+      }
+   }
 });
 
 userSchema.pre(
