@@ -20,6 +20,6 @@ export class Password {
       const salt = storedPassword.split(".")[1];
       const hashedPassword = await this.toHash(suppliedPassword, salt);
 
-      return hashedPassword === hashedPassword;
+      return storedPassword === hashedPassword;
    }
 }
