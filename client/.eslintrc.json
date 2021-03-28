@@ -30,6 +30,7 @@
        "eol-last": "off",
        "jsx-a11y/label-has-associated-control": "off",
        "import/extensions": ["error", "never"],
-       "import/no-unresolved": "off"
+       "import/no-unresolved": "off",
+       "no-else-return": "off"
     }
 }
