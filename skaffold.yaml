@@ -27,3 +27,6 @@ build:
         manual:
           - src: '**/*.ts*'
             dest: .
+          
+          - src: '**/*.js'
+            dest: .
