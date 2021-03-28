@@ -1,7 +1,34 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import type { AppProps } from "next/app";
+import type { AppContext, AppProps } from "next/app";
+import buildClient from "../api/build-client";
+import type { CurrentUser } from "../types/CurrentUser";
+import Header from "../components/header";
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+type Props = AppProps & CurrentUser;
+
+export default function AppComponent({
+  Component,
+  pageProps,
+  currentUser,
+}: Props) {
+  return (
+    <div>
+      <Header currentUser={currentUser} />
+      <Component {...pageProps} />
+    </div>
+  );
 }
+
+AppComponent.getInitialProps = async ({ ctx, Component }: AppContext) => {
+  const { req } = ctx;
+  const client = buildClient(req);
+  const { data } = await client.get("/api/users/currentuser");
+  let pageProps = {};
+
+  if (Component.getInitialProps) {
+    pageProps = await Component.getInitialProps(ctx);
+  }
+
+  return { pageProps, ...data };
+};

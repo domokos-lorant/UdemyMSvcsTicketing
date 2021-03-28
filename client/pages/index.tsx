@@ -1,15 +1,9 @@
 import { NextPageContext } from "next";
 import React from "react";
 import buildClient from "../api/build-client";
+import type { CurrentUser } from "../types/CurrentUser";
 
-type Props = {
-  currentUser: {
-    id: string;
-    email: string;
-  } | null;
-};
-
-export default function Index({ currentUser }: Props) {
+export default function Index({ currentUser }: CurrentUser) {
   return currentUser ? (
     <h1>You are signed in</h1>
   ) : (
