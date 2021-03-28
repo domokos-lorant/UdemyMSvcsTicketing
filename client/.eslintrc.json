@@ -26,6 +26,8 @@
        "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
        "arrow-body-style": "off",
        "no-param-reassign": "off",
-       "react/jsx-props-no-spreading": "off"
+       "react/jsx-props-no-spreading": "off",
+       "eol-last": "off",
+       "jsx-a11y/label-has-associated-control": "off"
     }
 }
