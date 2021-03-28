@@ -7,15 +7,20 @@ type Props = {
   body: { [key: string]: string };
 };
 
-export default function useRequest({ url, method, body }: Props) {
+type Response<TData> = {
+  data: TData | null;
+  isSuccessfull: boolean;
+};
+
+export default function useRequest<TData>({ url, method, body }: Props) {
   const [errors, setErrors] = useState<React.ReactElement | null>(null);
 
-  const doRequest = async () => {
+  const doRequest = async (): Promise<Response<TData>> => {
     setErrors(null);
 
     try {
-      const response = await axios.request({ url, method, data: body });
-      return response.data;
+      const response = await axios.request<TData>({ url, method, data: body });
+      return { data: response.data, isSuccessfull: true };
     } catch (error) {
       setErrors(
         <div className="alert alert-danger">
@@ -27,7 +32,7 @@ export default function useRequest({ url, method, body }: Props) {
           </ul>
         </div>,
       );
-      return null;
+      return { data: null, isSuccessfull: false };
     }
   };
 

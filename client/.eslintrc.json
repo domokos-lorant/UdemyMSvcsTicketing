@@ -28,6 +28,8 @@
        "no-param-reassign": "off",
        "react/jsx-props-no-spreading": "off",
        "eol-last": "off",
-       "jsx-a11y/label-has-associated-control": "off"
+       "jsx-a11y/label-has-associated-control": "off",
+       "import/extensions": ["error", "never"],
+       "import/no-unresolved": "off"
     }
 }

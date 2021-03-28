@@ -1,3 +1,4 @@
+import Router from "next/router";
 import React, { FormEvent, useState } from "react";
 import useRequest from "../../hooks/use-request";
 
@@ -14,9 +15,13 @@ export default function Signup() {
     },
   });
 
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    doRequest();
+    const response = await doRequest();
+
+    if (response.isSuccessfull) {
+      Router.push("/");
+    }
   };
 
   return (
