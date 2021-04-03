@@ -2,8 +2,13 @@ import express from "express";
 // Ensure exceptions from async routes go to error boundary.
 import "express-async-errors";
 import { json } from "body-parser";
-import { NotFoundError, errorHandler } from "@lorantd_study/common";
+import {
+  NotFoundError,
+  errorHandler,
+  currentUser
+} from "@lorantd_study/common";
 import cookieSession from "cookie-session";
+import { createTicketRouter } from "./routes/new";
 
 const app = express();
 // Make express trust ingress-nginx proxy
@@ -18,7 +23,10 @@ app.use(
   })
 );
 
+app.use(currentUser);
+
 // Routes
+app.use(createTicketRouter);
 
 // Fallback for unkown route
 app.all("*", async () => {
