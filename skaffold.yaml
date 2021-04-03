@@ -30,3 +30,11 @@ build:
           
           - src: '**/*.js'
             dest: .
+    - image: lorantd/tickets
+      context: tickets
+      docker: 
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .

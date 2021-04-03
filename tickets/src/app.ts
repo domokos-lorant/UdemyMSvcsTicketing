@@ -2,10 +2,6 @@ import express from "express";
 // Ensure exceptions from async routes go to error boundary.
 import "express-async-errors";
 import { json } from "body-parser";
-import { currentUserRouter } from "./routes/current-user";
-import signinRouter from "./routes/signin";
-import signoutRouter from "./routes/signout";
-import signupRouter from "./routes/signup";
 import { NotFoundError, errorHandler } from "@lorantd_study/common";
 import cookieSession from "cookie-session";
 
@@ -23,10 +19,6 @@ app.use(
 );
 
 // Routes
-app.use(currentUserRouter);
-app.use(signinRouter);
-app.use(signoutRouter);
-app.use(signupRouter);
 
 // Fallback for unkown route
 app.all("*", async () => {
