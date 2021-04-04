@@ -10,6 +10,7 @@ import {
 import cookieSession from "cookie-session";
 import { createTicketRouter } from "./routes/new";
 import { showTicketRouter } from "./routes/show";
+import { indexTicketRouter } from "./routes";
 
 const app = express();
 // Make express trust ingress-nginx proxy
@@ -29,6 +30,7 @@ app.use(currentUser);
 // Routes
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(indexTicketRouter);
 
 // Fallback for unkown route
 app.all("*", async () => {
