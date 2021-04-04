@@ -17,7 +17,6 @@ stan.on("connect", () => {
   })
 
   new TicketCreatedListener(stan).listen();
-
 }); 
 
 // Try to close NATS connection so that no more messages are sent this way.

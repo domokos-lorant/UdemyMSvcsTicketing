@@ -20,15 +20,20 @@ export abstract class Listener<T extends Event> {
   subscriptionOptions() {
     return this.client
       .subscriptionOptions()
+      // Keep a list of undelivered msgs per durable name.
       .setDeliverAllAvailable()
+      // Ensure that the msg is processed by a listener.
       .setManualAckMode(true)
       .setAckWait(this.ackWait)
+      // Set the durable name so that the service gets missed msgs.
       .setDurableName(this.queueGroupName);
   }
 
   listen() {
     const subscription = this.client.subscribe(
       this.subject,
+      // Set queue group so that msg goes only to one 
+      // of many and deliver all list is not cleared.
       this.queueGroupName,
       this.subscriptionOptions()
     );
