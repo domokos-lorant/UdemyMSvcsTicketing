@@ -1,5 +1,6 @@
-import nats, { Message } from "node-nats-streaming";
+import nats from "node-nats-streaming";
 import {randomBytes} from "crypto";
+import { TicketCreatedListener } from "./ticket-created-listener";
 
 console.clear();
 
@@ -15,26 +16,10 @@ stan.on("connect", () => {
     process.exit();
   })
 
-  const options = stan.subscriptionOptions()
-    .setManualAckMode(true) // Ensure that the msg is processed by a listener.
-    .setDeliverAllAvailable() // Keep a list of undelivered msgs per durable name.
-    .setDurableName("accounting-service"); // Set the durable name so that the service gets missed msgs.
+  new TicketCreatedListener(stan).listen();
 
-  const subscription = stan.subscribe(
-    "ticket:created", 
-    "queue-group-name", // Set queue group so that msg goes only to one of many and deliver all list is not cleared.
-    options
-  );
-  subscription.on("message", (msg: Message) => {
-    const data = msg.getData();
-
-    if (typeof data === "string") {
-      console.log(`Received event #${msg.getSequence()}, with data ${data}`);
-    }
-
-    msg.ack();
-  });
 }); 
 
+// Try to close NATS connection so that no more messages are sent this way.
 process.on("SIGINT", () => stan.close());
 process.on("SIGTERM", () => stan.close());
