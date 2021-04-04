@@ -6,7 +6,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace NodeJS {
     interface Global {
-      signin(): string[];
+      signin(userId?: string): string[];
     }
   }
 }
@@ -35,10 +35,10 @@ afterAll(async () => {
   await mongoose.connection.close();
 });
 
-global.signin = () => {
+global.signin = (userId?: string) => {
   // Build a JWT payload. { id, email }
   const payload = {
-    id: "TestId",
+    id: userId || "TestId",
     email: "test@test.com"
   };
 

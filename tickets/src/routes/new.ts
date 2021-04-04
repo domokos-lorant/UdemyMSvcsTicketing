@@ -1,13 +1,9 @@
 import express, { Request, Response } from "express";
 import { requireAuth, validateRequest } from "@lorantd_study/common";
-import { body } from "express-validator";
 import Ticket from "../models/ticket";
+import { validators } from "./validators";
 
 const router = express.Router();
-const validators = [
-  body("title").not().isEmpty().withMessage("Title is required"),
-  body("price").isFloat({ gt: 0 }).withMessage("Price must be greater than 0")
-];
 
 router.post(
   "/api/tickets",
