@@ -1,9 +1,9 @@
-import { Message, Stan } from "node-nats-streaming";
+import { Message, Stan, SubscriptionOptions } from "node-nats-streaming";
 import { Subjects } from "./subjects";
 
 export interface Event {
   subject: Subjects;
-  data: any;
+  data: unknown;
 }
 
 export abstract class Listener<T extends Event> {
@@ -17,22 +17,24 @@ export abstract class Listener<T extends Event> {
     this.client = client;
   }
 
-  subscriptionOptions() {
-    return this.client
-      .subscriptionOptions()
-      // Keep a list of undelivered msgs per durable name.
-      .setDeliverAllAvailable()
-      // Ensure that the msg is processed by a listener.
-      .setManualAckMode(true)
-      .setAckWait(this.ackWait)
-      // Set the durable name so that the service gets missed msgs.
-      .setDurableName(this.queueGroupName);
+  subscriptionOptions(): SubscriptionOptions {
+    return (
+      this.client
+        .subscriptionOptions()
+        // Keep a list of undelivered msgs per durable name.
+        .setDeliverAllAvailable()
+        // Ensure that the msg is processed by a listener.
+        .setManualAckMode(true)
+        .setAckWait(this.ackWait)
+        // Set the durable name so that the service gets missed msgs.
+        .setDurableName(this.queueGroupName)
+    );
   }
 
-  listen() {
+  listen(): void {
     const subscription = this.client.subscribe(
       this.subject,
-      // Set queue group so that msg goes only to one 
+      // Set queue group so that msg goes only to one
       // of many and deliver all list is not cleared.
       this.queueGroupName,
       this.subscriptionOptions()
@@ -46,7 +48,7 @@ export abstract class Listener<T extends Event> {
     });
   }
 
-  parseMessage(msg: Message) {
+  parseMessage(msg: Message): unknown {
     const data = msg.getData();
     return typeof data === "string"
       ? JSON.parse(data)
