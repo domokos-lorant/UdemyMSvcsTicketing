@@ -9,6 +9,7 @@ export interface TicketAttributes {
 
 export interface TicketDocument extends TicketAttributes, Document {
   version: number;
+  orderId?: string;
 }
 
 interface TicketModel extends Model<TicketDocument> {
@@ -28,6 +29,9 @@ const ticketSchema = new Schema(
     price: {
       type: Number,
       required: true
+    },
+    orderId: {
+      type: String
     }
   },
   {
