@@ -1,20 +1,29 @@
-import mongoose from "mongoose";
+import mongoose, { Query } from "mongoose";
 import { Order, OrderStatus } from "./order";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface TicketAttributes {
+  id: string;
   title: string;
   price: number;
 }
 
-export interface TicketDocument extends mongoose.Document, TicketAttributes {
+export interface TicketDocument
+  extends mongoose.Document,
+    Omit<TicketAttributes, "id"> {
   isReserved(): Promise<boolean>;
+  version: number;
 }
 
 interface TicketModel extends mongoose.Model<TicketDocument> {
   build(attributes: TicketAttributes): TicketDocument;
+  findByEvent(event: {
+    id: string;
+    version: number;
+  }): Query<TicketDocument | null, TicketDocument>;
 }
 
-const ticketSchema = new mongoose.Schema<TicketDocument>(
+const ticketSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -36,8 +45,22 @@ const ticketSchema = new mongoose.Schema<TicketDocument>(
   }
 );
 
+ticketSchema.set("versionKey", "version");
+ticketSchema.plugin(updateIfCurrentPlugin);
+
 ticketSchema.statics.build = (attributes: TicketAttributes): TicketDocument => {
-  return new Ticket(attributes);
+  const { id, ...rest } = attributes;
+  return new Ticket({
+    ...rest,
+    _id: id
+  });
+};
+
+ticketSchema.statics.findByEvent = (event: {
+  id: string;
+  version: number;
+}): Query<TicketDocument | null, TicketDocument> => {
+  return Ticket.findOne({ _id: event.id, version: event.version - 1 });
 };
 
 // We need to use a founction (not labda) to ensure "this" is the document.
@@ -46,7 +69,7 @@ ticketSchema.methods.isReserved = async function () {
   // and order is not cancelled. If we find such an order, then
   // the ticket is reserved.
   const existingOrder = await Order.findOne({
-    ticket: this,
+    ticket: this as any,
     status: {
       $in: [
         OrderStatus.Created,
