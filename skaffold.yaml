@@ -54,3 +54,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: lorantd/payments
+      context: payments
+      docker: 
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
