@@ -46,3 +46,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: lorantd/expiration
+      context: expiration
+      docker: 
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
