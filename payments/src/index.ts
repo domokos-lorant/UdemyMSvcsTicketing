@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import { app } from "./app";
+// eslint-disable-next-line max-len
 import { OrderCancelledListener } from "./events/listeners/order-cancelled-listener";
+// eslint-disable-next-line max-len
 import { OrderCreatedListener } from "./events/listeners/order-created-listener";
 import { natsWrapper } from "./nats-wrapper";
 
