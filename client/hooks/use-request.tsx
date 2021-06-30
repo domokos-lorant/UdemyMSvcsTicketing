@@ -1,10 +1,11 @@
 import axios, { Method } from "axios";
 import React, { useState } from "react";
 
-type Props = {
+type Props<TData> = {
   url: string;
   method: Method;
   body: { [key: string]: string };
+  onSuccess?: (_data: TData) => void;
 };
 
 type Response<TData> = {
@@ -12,14 +13,28 @@ type Response<TData> = {
   isSuccessfull: boolean;
 };
 
-export default function useRequest<TData>({ url, method, body }: Props) {
+export default function useRequest<TData>({
+  url,
+  method,
+  body,
+  onSuccess,
+}: Props<TData>) {
   const [errors, setErrors] = useState<React.ReactElement | null>(null);
 
-  const doRequest = async (): Promise<Response<TData>> => {
+  const doRequest = async (props: any = {}): Promise<Response<TData>> => {
     setErrors(null);
 
     try {
-      const response = await axios.request<TData>({ url, method, data: body });
+      const response = await axios.request<TData>({
+        url,
+        method,
+        data: { ...body, ...props },
+      });
+
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
+
       return { data: response.data, isSuccessfull: true };
     } catch (error) {
       setErrors(

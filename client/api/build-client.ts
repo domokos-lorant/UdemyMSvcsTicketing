@@ -1,8 +1,10 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 import { IncomingMessage } from "node:http";
 import isServer from "../utils/isServer";
 
-export default function buildClient(req: IncomingMessage | undefined) {
+export default function buildClient(
+  req: IncomingMessage | undefined,
+): AxiosInstance {
   if (isServer()) {
     return axios.create({
       baseURL:

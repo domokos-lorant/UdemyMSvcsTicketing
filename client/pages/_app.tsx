@@ -15,7 +15,9 @@ export default function AppComponent({
   return (
     <div>
       <Header currentUser={currentUser} />
-      <Component {...pageProps} />
+      <div className="container">
+        <Component currentUser={currentUser} {...pageProps} />
+      </div>
     </div>
   );
 }
@@ -27,7 +29,9 @@ AppComponent.getInitialProps = async ({ ctx, Component }: AppContext) => {
   let pageProps = {};
 
   if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
+    // Blah, tried a bit to extend the type but didn't work
+    // @ts-ignore
+    pageProps = await Component.getInitialProps(ctx, client, data.currentUser);
   }
 
   return { pageProps, ...data };

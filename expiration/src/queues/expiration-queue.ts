@@ -1,4 +1,5 @@
 import Queue from "bull";
+// eslint-disable-next-line max-len
 import { ExpirationCompletePublisher } from "../events/publishers/expiration-complete-publisher";
 import { natsWrapper } from "../nats-wrapper";
 
