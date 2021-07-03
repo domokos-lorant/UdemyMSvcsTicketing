@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { app } from "./app";
 
 // Express has trouble with async function directly,
-// so safe to const and the run.
+// so save to const and the run.
 const start = async () => {
   if (!process.env.JWT_KEY) {
     throw new Error("JWT_KEY must be defined");
